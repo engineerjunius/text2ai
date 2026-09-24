@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { assets } from '../assets/assets'
 import { Link, useNavigate } from 'react-router-dom'
-import Result from '../pages/Result'
 import { AppContext } from '../context/AppContext'
 
 const Navbar = () => {
@@ -44,8 +43,6 @@ const Navbar = () => {
                 <button onClick={()=>setShowLogin(true)} className='bg-teal-800 text-white px-8 sm:px-10 py-2  cursor-pointer rounded-full hover:bg-gradient-to-r hover:from-violet-800 hover:to-teal-600' >Login</button>
             </div>
         }
-        <div></div>
-        <div></div>
     </div>
 
     </div>

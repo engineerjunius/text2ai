@@ -1,32 +1,42 @@
 import userModel from "../models/userModel.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import stripe from "stripe"
-import {loadStripe} from '@stripe/stripe-js';
 
-const stripe = await loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+const createToken = (id) => jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: '7d'})
+
 const registerUser = async (req, res) => {
 
     try {
         const {name, email, password} = req.body
 
         if(!name || !email || !password) {
-            return res.json({sucess:false , message:"All fields are required"})
+            return res.json({success: false, message: "All fields are required"})
         }
-            
+
+        if (password.length < 8) {
+            return res.json({success: false, message: "Password must be at least 8 characters"})
+        }
+
+        const normalizedEmail = email.trim().toLowerCase()
+
+        const exists = await userModel.findOne({email: normalizedEmail})
+        if (exists) {
+            return res.json({success: false, message: "An account with this email already exists"})
+        }
+
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
 
         const userData = {
-            name, 
-            email, 
+            name,
+            email: normalizedEmail,
             password: hashedPassword
         }
 
         const newUser = new userModel(userData)
         const user = await newUser.save()
 
-        const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
+        const token = createToken(user._id)
 
         res.json({success: true, token, user: {name: user.name}})
 
@@ -34,54 +44,49 @@ const registerUser = async (req, res) => {
         console.log(error)
         res.json({success: false, message: error.message})
     }
-
-
 }
 
 const loginUser = async (req, res) => {
 
     try {
         const {email, password} = req.body;
-        const user = await userModel.findOne({email})
 
-        if (!user) {
-            return res.json({success: false, message: "User not found"})
+        if (!email || !password) {
+            return res.json({success: false, message: "Email and password are required"})
         }
 
-        const isMatch = await bcrypt.compare(password, user.password)
+        const user = await userModel.findOne({email: email.trim().toLowerCase()})
 
-        if (isMatch) {
-
-            const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
-
-            res.json({success: true, token, user: {name: user.name}})
-
-        } else {
-            return res.json({success: false, message: "Invalid credentials"})
+        // Same message for unknown email and wrong password, so accounts can't be enumerated
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.json({success: false, message: "Invalid email or password"})
         }
+
+        const token = createToken(user._id)
+
+        res.json({success: true, token, user: {name: user.name}})
 
     } catch (error) {
         console.log(error)
         res.json({success: false, message: error.message})
     }
-    }
+}
 
-    const userCredits = async (req, res) => {
+const userCredits = async (req, res) => {
 
-        try {
-            const {userId} = req.body;
+    try {
+        const user = await userModel.findById(req.userId)
 
-            const user = await userModel.findById(userId)
-            res.json({success: true, credits: user.creditBalance, user:{name: user.name}})
-
-        } catch (error) {
-            console.log(error)
-            res.json({success: false, message: error.message})
-            
+        if (!user) {
+            return res.json({success: false, message: "User not found"})
         }
+
+        res.json({success: true, credits: user.creditBalance, user: {name: user.name}})
+
+    } catch (error) {
+        console.log(error)
+        res.json({success: false, message: error.message})
     }
+}
 
-    
-
-    export {registerUser, loginUser, userCredits}
-        
+export {registerUser, loginUser, userCredits}

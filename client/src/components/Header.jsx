@@ -1,21 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { assets } from '../assets/assets'
-import { delay, motion } from "motion/react"
+import { motion } from "motion/react"
 import { useNavigate } from 'react-router-dom';
-import { AppContext } from '../context/AppContext';
 
 const Header = () => {
 
-    const {user, setShowLogin} = useContext(AppContext);
     const navigate = useNavigate();
 
-    const onClickHandler = () => {
-        if(user){
-            navigate('/result')
-        }else{
-            setShowLogin(true)
-        }
-    }
+    // Guests can try it for free; the Result page handles the trial and sign-up prompt
+    const onClickHandler = () => navigate('/result')
 
 
   return (
@@ -60,9 +53,14 @@ const Header = () => {
         animate={{opacity: 1}}
         transition={{default: { duration: 0.5 }, opacity: { delay: 0.8, duration: 1} }}
         >
-            Generate images
+            Try it free
             <img className='h-6' src={assets.star} alt="" />
         </motion.button>
+        <motion.p className='text-xs text-stone-300 mt-3'
+        initial={{opacity: 0}}
+        animate={{opacity: 1}}
+        transition={{delay: 0.9, duration: 1}}
+        >No sign-up needed for your first images</motion.p>
 
         <motion.div className='flex flex-wrap items-center gap-2 mt-10 justify-center'
         initial={{opacity: 0}}

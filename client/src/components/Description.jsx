@@ -18,7 +18,7 @@ const Description = () => {
             <img src={assets.roboticHand} alt="" className='w-80 xl:w-96 rounded-lg' />
             <div>
                 <h2 className='text-3xl font-medium max-w-lg mb-4'>Introducing the AI-Powered Text to Image Generator</h2>
-                <p className='text-gray-300'>Turn your words into stunning visuals with our AI-powered Text-to-Image Generator! Simply enter a description, and our advanced AI will create a unique, high-quality image based on your input. Perfect for artists, designers, and anyone looking to bring their ideas to life. Try it now and watch your imagination come to life! 🚀🎨.</p>
+                <p className='text-gray-300'>Turn your words into stunning visuals with our AI-powered Text-to-Image Generator! Simply enter a description, and our advanced AI will create a unique, high-quality image based on your input. Perfect for artists, designers, and anyone looking to bring their ideas to life. Try it now and watch your imagination come to life! 🚀🎨</p>
                 
             </div>
         </div>
