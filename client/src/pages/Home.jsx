@@ -1,22 +1,19 @@
 import React from 'react'
-import Header from '../components/Header'
+import Hero from '../components/Hero'
 import Steps from '../components/Steps'
-import Description from '../components/Description'
-import GenerateBtn from '../components/GenerateBtn'
+import Gallery from '../components/Gallery'
+import Features from '../components/Features'
+import CallToAction from '../components/CallToAction'
 
 const Home = () => {
   return (
-    <div>
-      <Header /> 
-      <Steps />  
-      <Description /> 
-      {/* <Testimonials /> */}
-      <GenerateBtn />
-    
-    
-      
-
-    </div>
+    <>
+      <Hero />
+      <Steps />
+      <Gallery />
+      <Features />
+      <CallToAction />
+    </>
   )
 }
 

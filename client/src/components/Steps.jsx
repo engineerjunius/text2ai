@@ -1,36 +1,49 @@
 import React from 'react'
-import { stepsData } from '../assets/assets'
 import { motion } from 'motion/react'
+import { Download, PenLine, WandSparkles } from 'lucide-react'
+import SectionHeading from './SectionHeading'
+
+const steps = [
+  {
+    icon: PenLine,
+    title: 'Describe your vision',
+    description: 'Type a phrase, sentence or paragraph describing the image you want. Add a style if you like.',
+  },
+  {
+    icon: WandSparkles,
+    title: 'Let the AI paint it',
+    description: 'The FLUX.1 model turns your words into a unique, high-quality 1024 × 1024 image in seconds.',
+  },
+  {
+    icon: Download,
+    title: 'Download and share',
+    description: 'Save your image in one click, or regenerate for a fresh take on the same prompt.',
+  },
+]
 
 const Steps = () => {
   return (
-    <motion.div 
-        initial={{opacity: 0.2, y:100}}
-        transition={{duration: 1}}
-        whileInView={{opacity: 1, y:0}}
-        viewport={{once: true}}
-    className='flex flex-col gap-4 items-center justify-center my-32'>
-        <h1 className='text-3xl text-stone-100 sm:text-4xl font-semibold mb-2'>
-            How it works
-        </h1>
-        <p className='text-lg text-gray-200 mb-8'>
-            Transform Texts Into Stunning Images
-        </p>
+    <section id='how-it-works' className='mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:px-6'>
+      <SectionHeading eyebrow='How it works' title='From prompt to picture in three steps' />
 
-        <div className='space-y-4 w-full max-w-3xl text-sm'>
-            {stepsData.map((item, index)=>(
-                <div className='flex items-center gap-4 p-5 px-8 bg-slate-500/50 rounded-2xl shadow-lg border border-slate-400 cursor-pointer hover:scale-105 transition-all duration-500' key={index}>
-                    <img width={40} src={item.icon} alt="" />
-                    <div>
-                    <h2 className='text-xl font-bold text-white'>{item.title}</h2>
-                    <p className='text-gray-300'>{item.description}</p>
-                    </div>
-                </div>
-
-            ))}
-        </div>
-
-    </motion.div>
+      <div className='grid gap-4 md:grid-cols-3'>
+        {steps.map((step, index) => (
+          <motion.div key={step.title}
+          initial={{opacity: 0, y: 24}}
+          whileInView={{opacity: 1, y: 0}}
+          viewport={{once: true}}
+          transition={{delay: index * 0.1, duration: 0.5}}
+          className='relative rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-white/20 hover:bg-white/[0.05]'>
+            <span className='absolute right-6 top-6 font-mono text-xs text-zinc-600'>0{index + 1}</span>
+            <div className='flex size-11 items-center justify-center rounded-xl border border-violet-500/20 bg-violet-500/10'>
+              <step.icon className='size-5 text-violet-300' />
+            </div>
+            <h3 className='mt-5 text-lg font-medium'>{step.title}</h3>
+            <p className='mt-2 text-sm leading-relaxed text-zinc-400'>{step.description}</p>
+          </motion.div>
+        ))}
+      </div>
+    </section>
   )
 }
 

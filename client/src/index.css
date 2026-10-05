@@ -1,7 +1,60 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
-
 @import "tailwindcss";
 
-* {
-    font-family: 'Outfit', sans-serif;
+/* Design tokens: dark "AI studio" palette with one violet → cyan accent */
+@theme {
+    --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+    --color-base: #09090b;
+    --color-surface: #111114;
+    --color-accent-from: #8b5cf6;
+    --color-accent-to: #22d3ee;
+
+    --animate-shimmer: shimmer 2s linear infinite;
+
+    @keyframes shimmer {
+        from { background-position: 200% 0; }
+        to { background-position: -200% 0; }
+    }
+}
+
+@layer base {
+    html {
+        color-scheme: dark;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-base text-zinc-100 antialiased;
+    }
+
+    ::selection {
+        @apply bg-violet-500/40 text-white;
+    }
+}
+
+@utility text-gradient {
+    @apply bg-gradient-to-r from-accent-from to-accent-to bg-clip-text text-transparent;
+}
+
+/* Faint grid that fades out toward the bottom, used behind the page */
+@utility bg-grid {
+    background-image:
+        linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+/* Diagonal light sweep for loading placeholders */
+@utility shimmer {
+    background-image: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.06) 50%, transparent 70%);
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+}
+
+/* react-toastify, matched to the dark theme */
+:root {
+    --toastify-color-dark: #18181b;
+    --toastify-font-family: var(--font-sans);
 }
